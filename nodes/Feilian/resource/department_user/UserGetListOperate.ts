@@ -26,7 +26,7 @@ const UserGetListOperate: ResourceOperations = {
 			name: 'fetch_child',
 			type: 'boolean',
 			default: false,
-			description: '是否递归获取子部门成员',
+			description: 'Whether to recursively fetch sub-department members',
 		},
 		paginationOptions.returnAll,
 		paginationOptions.limit(200),

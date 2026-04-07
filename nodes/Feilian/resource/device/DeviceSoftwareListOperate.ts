@@ -9,12 +9,11 @@ const DeviceSoftwareListOperate: ResourceOperations = {
 	order: 50,
 	options: [
 		{
-			displayName: '设备 did',
+			displayName: '设备 Did',
 			name: 'did',
 			type: 'string',
 			required: true,
 			default: '',
-			description: '设备 did',
 		},
 		paginationOptions.returnAll,
 		paginationOptions.limit(200),

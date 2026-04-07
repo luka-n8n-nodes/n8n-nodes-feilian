@@ -19,6 +19,7 @@ const UserGetIdByContactOperate: ResourceOperations = {
 			name: 'email',
 			type: 'string',
 			default: '',
+			placeholder: 'name@email.com',
 		},
 		{
 			displayName: '手机',

@@ -20,7 +20,6 @@ export default {
 			name: 'id',
 			type: 'string',
 			default: '',
-			description: '用户 ID',
 		},
 		{
 			displayName: '访客账号',

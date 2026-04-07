@@ -4,17 +4,16 @@ import { ResourceOperations } from '../../../help/type/IResource';
 import { batchingOption, timeoutOption } from '../../../help/utils/sharedOptions';
 
 const DeviceGetDetailOperate: ResourceOperations = {
-	name: 'did 换设备信息',
+	name: 'Did 换设备信息',
 	value: 'device:detail',
 	order: 20,
 	options: [
 		{
-			displayName: '设备 did',
+			displayName: '设备 Did',
 			name: 'did',
 			type: 'string',
 			required: true,
 			default: '',
-			description: '设备 did',
 		},
 		{
 			displayName: 'Options',

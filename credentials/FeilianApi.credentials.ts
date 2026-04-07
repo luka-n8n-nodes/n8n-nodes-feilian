@@ -10,6 +10,7 @@ import {
 export class FeilianApi implements ICredentialType {
 	name = 'feilianApi';
 	displayName = '飞连 API';
+	documentationUrl = 'https://github.com/luka-n8n-nodes/n8n-nodes-feilian';
 	icon = 'file:../nodes/Feilian/feilian.svg' as const;
 	properties: INodeProperties[] = [
 		{
@@ -47,6 +48,7 @@ export class FeilianApi implements ICredentialType {
 			default: '',
 			typeOptions: {
 				expirable: true,
+				password: true,
 			},
 		},
 	];
