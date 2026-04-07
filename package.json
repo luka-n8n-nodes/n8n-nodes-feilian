@@ -1,0 +1,60 @@
+{
+	"name": "@luka-cat-mimi/n8n-nodes-feilian",
+	"version": "0.1.0",
+	"description": "n8n 社区节点：集成飞连开放平台，支持部门与成员管理、Wi-Fi 管理、终端管理",
+	"keywords": [
+		"n8n",
+		"n8n-node",
+		"n8n-community-node-package",
+		"feilian",
+		"飞连",
+		"volcengine"
+	],
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"homepage": "https://github.com/luka-n8n-nodes/n8n-nodes-feilian#readme",
+	"author": {
+		"name": "luka-cat",
+		"email": "luka.cat.mimi@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/luka-n8n-nodes/n8n-nodes-feilian.git"
+	},
+	"main": "index.js",
+	"scripts": {
+		"build": "n8n-node build",
+		"dev": "n8n-node dev",
+		"format": "prettier nodes credentials --write",
+		"lint": "n8n-node lint",
+		"lintfix": "n8n-node lint --fix"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [
+			"dist/credentials/FeilianApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Feilian/Feilian.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "*",
+		"@types/node": "^20.19.37",
+		"eslint": "9.39.4",
+		"prettier": "3.8.1",
+		"typescript": "5.9.3"
+	},
+	"dependencies": {
+		"glob": "^10.4.5"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

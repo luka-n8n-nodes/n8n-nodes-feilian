@@ -1,0 +1,22 @@
+node_modules
+dist
+.tmp
+tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/launch.json
+*.swp
+*.swo
+
+# Logs
+npm-debug.log*
+*.log
+
+# Lock files (use package-lock.json)
+yarn.lock
+pnpm-lock.yaml
