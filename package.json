@@ -1,6 +1,6 @@
 {
 	"name": "@luka-cat-mimi/n8n-nodes-feilian",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "n8n 社区节点：集成飞连开放平台，支持部门与成员管理、Wi-Fi 管理、终端管理",
 	"keywords": [
 		"n8n",
