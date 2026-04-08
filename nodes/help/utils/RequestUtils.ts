@@ -41,12 +41,24 @@ class RequestUtils {
 		);
 	}
 
+	private static isTokenExpiredCode(code: number) {
+		return code === 40002 || code === 40003 || code === 164006;
+	}
+
 	static async request(this: IExecuteFunctions, options: IHttpRequestOptions) {
 		if (options.json === undefined) options.json = true;
 
 		return RequestUtils.originRequest
 			.call(this, options)
-			.then((res) => RequestUtils.processResponse(res))
+			.then((res) => {
+				if (!(res instanceof Buffer || res instanceof ArrayBuffer || res instanceof Uint8Array)
+					&& res.code && RequestUtils.isTokenExpiredCode(res.code)) {
+					return RequestUtils.originRequest
+						.call(this, options, true)
+						.then((retryRes) => RequestUtils.processResponse(retryRes));
+				}
+				return RequestUtils.processResponse(res);
+			})
 			.catch((error) => {
 				if (error.context && error.context.data) {
 					let errorData: any = {};
@@ -68,7 +80,7 @@ class RequestUtils {
 
 					const { code, message: msg } = errorData;
 
-					if (code === 40002 || code === 40003) {
+					if (RequestUtils.isTokenExpiredCode(code)) {
 						return RequestUtils.originRequest
 							.call(this, options, true)
 							.then((res) => RequestUtils.processResponse(res));
