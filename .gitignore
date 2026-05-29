@@ -20,3 +20,6 @@ npm-debug.log*
 # Lock files (use package-lock.json)
 yarn.lock
 pnpm-lock.yaml
+.specstory
+.vscode
+.cursorindexingignore
