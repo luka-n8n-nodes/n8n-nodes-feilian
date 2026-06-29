@@ -8,46 +8,75 @@ import RequestUtils from '../../../help/utils/RequestUtils';
 import { ResourceOperations } from '../../../help/type/IResource';
 import { batchingOption, timeoutOption } from '../../../help/utils/sharedOptions';
 
+function normalizeStringArray(raw: unknown): string[] {
+	if (raw === undefined || raw === null || raw === '') {
+		return [];
+	}
+	if (Array.isArray(raw)) {
+		return raw.map((item) => String(item).trim()).filter((s) => s);
+	}
+	if (typeof raw === 'string') {
+		const trimmed = raw.trim();
+		if (trimmed.startsWith('[')) {
+			try {
+				const parsed = JSON.parse(trimmed) as unknown;
+				if (Array.isArray(parsed)) {
+					return parsed.map((item) => String(item).trim()).filter((s) => s);
+				}
+			} catch {
+				// fall through to comma-separated parsing
+			}
+		}
+		return trimmed
+			.split(',')
+			.map((s) => s.trim())
+			.filter((s) => s);
+	}
+	return [String(raw).trim()].filter((s) => s);
+}
+
 const UserBatchGetDetailOperate: ResourceOperations = {
 	name: '批量查询用户详情',
 	value: 'user:batch',
 	order: 70,
 	options: [
 		{
-			displayName: '用户 ID 列表',
+			displayName: 'IDs',
 			name: 'ids',
 			type: 'string',
 			default: '',
-			description: '多个 ID 用英文逗号分隔',
+			description:
+				'用户 ID 列表，格式为 ou_xxx，最大长度不超过 50，与其他查询参数不能同时为空',
 		},
 		{
-			displayName: '邮箱列表',
+			displayName: 'Emails',
 			name: 'emails',
 			type: 'string',
 			default: '',
-			description: '多个邮箱用英文逗号分隔',
+			description: '邮箱列表，最大长度不超过 50，与其他查询参数不能同时为空',
 		},
 		{
-			displayName: '手机列表',
+			displayName: 'Mobiles',
 			name: 'mobiles',
 			type: 'string',
 			default: '',
-			description: '多个手机号用英文逗号分隔',
+			description: '手机号列表，最大长度不超过 50，与其他查询参数不能同时为空',
 		},
 		{
 			displayName: 'User IDs',
 			name: 'user_ids',
 			type: 'string',
 			default: '',
-			description: '多个 user_id 用英文逗号分隔',
+			description: '自定义用户 ID 列表，最大长度不超过 50，与其他查询参数不能同时为空',
 		},
 		{
-			displayName: '查询模式',
+			displayName: 'Mode',
 			name: 'mode',
 			type: 'options',
+			description: '查询模式，0:仅查询在职用户 1:查询全部用户，包括离职。 默认值 0',
 			options: [
-				{ name: '仅在职用户', value: 0 },
-				{ name: '全部用户', value: 1 },
+				{ name: '0 - 仅查询在职用户', value: 0 },
+				{ name: '1 - 查询全部用户，包括离职', value: 1 },
 			],
 			default: 0,
 		},
@@ -61,36 +90,24 @@ const UserBatchGetDetailOperate: ResourceOperations = {
 		},
 	] as INodeProperties[],
 	async call(this: IExecuteFunctions, index: number): Promise<IDataObject[]> {
-		const idsRaw = this.getNodeParameter('ids', index, '') as string;
-		const emailsRaw = this.getNodeParameter('emails', index, '') as string;
-		const mobilesRaw = this.getNodeParameter('mobiles', index, '') as string;
-		const userIdsRaw = this.getNodeParameter('user_ids', index, '') as string;
+		const ids = normalizeStringArray(this.getNodeParameter('ids', index, ''));
+		const emails = normalizeStringArray(this.getNodeParameter('emails', index, ''));
+		const mobiles = normalizeStringArray(this.getNodeParameter('mobiles', index, ''));
+		const userIds = normalizeStringArray(this.getNodeParameter('user_ids', index, ''));
 		const mode = this.getNodeParameter('mode', index, 0) as number;
 		const options = this.getNodeParameter('options', index, {}) as { timeout?: number };
 		const body: IDataObject = { mode };
-		if (idsRaw) {
-			body.ids = idsRaw
-				.split(',')
-				.map((s: string) => s.trim())
-				.filter((s: string) => s);
+		if (ids.length > 0) {
+			body.ids = ids;
 		}
-		if (emailsRaw) {
-			body.emails = emailsRaw
-				.split(',')
-				.map((s: string) => s.trim())
-				.filter((s: string) => s);
+		if (emails.length > 0) {
+			body.emails = emails;
 		}
-		if (mobilesRaw) {
-			body.mobiles = mobilesRaw
-				.split(',')
-				.map((s: string) => s.trim())
-				.filter((s: string) => s);
+		if (mobiles.length > 0) {
+			body.mobiles = mobiles;
 		}
-		if (userIdsRaw) {
-			body.user_ids = userIdsRaw
-				.split(',')
-				.map((s: string) => s.trim())
-				.filter((s: string) => s);
+		if (userIds.length > 0) {
+			body.user_ids = userIds;
 		}
 		const requestOptions: IHttpRequestOptions = {
 			method: 'POST',
