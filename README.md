@@ -1,6 +1,6 @@
 # @luka-cat-mimi/n8n-nodes-feilian
 
-飞连 n8n 社区节点，提供飞连开放平台 API 的集成支持，覆盖部门与成员管理、Wi-Fi 管理、终端管理、软件管理等场景。
+飞连 n8n 社区节点，提供飞连开放平台 API 的集成支持，覆盖事件订阅 Webhook 触发、部门与成员管理、Wi-Fi 管理、终端管理、软件管理等场景。
 
 ## 安装
 
@@ -9,6 +9,39 @@
 节点名称：`@luka-cat-mimi/n8n-nodes-feilian`
 
 ## 功能列表
+
+### 飞连 Webhook Trigger
+
+通过 **Webhook** 接收飞连事件订阅回调。将节点生成的 URL 配置到飞连管理后台「系统设置 - 集成管理 - 事件订阅」的请求地址中。
+
+**主要特点：**
+
+- 固定 POST，自动处理首次 URL 验证（`url_verification`），返回完整 challenge JSON
+- 支持 Verification Token 校验；可选 Encrypt Key，按 AES-256-CBC 解密加密推送
+- 兼容 JSON body 与 `application/octet-stream` 文件推送
+- 默认订阅**所有事件**，也可按 `header.event_type` 多选过滤；未匹配事件返回 HTTP 200 但不触发工作流
+
+**支持的事件：**
+
+| 事件名称 | Event Key |
+| --- | --- |
+| 所有事件 | `*` |
+| 部门新建 | `department.v1.create` |
+| 部门信息变更 | `department.v1.update` |
+| 部门被删除 | `department.v1.delete` |
+| 新员工入职 | `user.v1.create` |
+| 员工信息变更 | `user.v1.update` |
+| 员工账号激活 | `user.activation.v1.update` |
+| 员工账号状态变更 | `user.status.v1.update` |
+| 角色被删除 | `role.v1.delete` |
+| 用户登录认证 | `auth.v1.login` |
+| 审批实例状态变更 | `approval.v1.instance.status.update` |
+| 审批节点操作变更 | `approval.v1.instance.node.action` |
+| 短信通知 | `notify.v1.sms` |
+| 可信设备签发证书 | `asset.trusted_device.v1.create_cert` |
+| 可信设备状态变更 | `asset.trusted_device.v1.status` |
+
+> 请先激活工作流，再在飞连后台保存请求地址，以便完成 URL 有效性验证。
 
 ### 部门与成员 (18)
 
@@ -109,8 +142,9 @@
 
 ## 注意事项
 
-1. 使用前需要在飞连开放平台创建应用并获取 API Key 和 API Secret
+1. 使用 API 节点前需要在飞连开放平台创建应用并获取 API Key 和 API Secret
 2. 部分接口需要相应的权限配置
+3. 使用 Webhook Trigger 时需填写事件订阅的 Verification Token；若开启加密推送，还需填写 Encrypt Key
 
 ## 📝 许可证
 

@@ -44,7 +44,8 @@
       "dist/credentials/FeilianApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/Feilian/Feilian.node.js"
+      "dist/nodes/Feilian/Feilian.node.js",
+      "dist/nodes/Feilian/FeilianWebhookTrigger.node.js"
     ],
     "strict": false
   },
